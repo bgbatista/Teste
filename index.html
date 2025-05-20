@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>L & M</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a001a, #2b0b2e);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #ffe6f0;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+    }
+
+    .section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+
+    .section.active {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2.2em;
+      color: #ffccd5;
+      text-align: center;
+    }
+
+    .main-photo {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border: 3px solid #ffccd5;
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .timer {
+      font-size: 1.3em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .heart {
+      font-size: 2em;
+      color: #ff4b69;
+      animation: pulse 1.5s infinite;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .message {
+      font-size: 1.1em;
+      margin-top: 10px;
+      min-height: 30px;
+      color: #ffdce5;
+      transition: opacity 0.6s ease-in-out;
+      text-align: center;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #ffccd5;
+      opacity: 0.85;
+      transition: transform 0.3s, opacity 0.5s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    .spotify-link {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    .spotify-link a {
+      display: inline-block;
+      background: #1DB954;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1em;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s;
+    }
+
+    .spotify-link a:hover {
+      background-color: #199d48;
+    }
+
+    .history-btn, .love-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #ff4b69;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s;
+      font-weight: bold;
+      display: block;
+      width: 100%;
+    }
+
+    .history-btn:hover, .love-btn:hover {
+      background-color: #e03e5b;
+    }
+
+    .timeline {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .timeline li {
+      border-left: 3px solid #ff6b81;
+      margin-left: 10px;
+      padding-left: 15px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .timeline li::before {
+      content: "💗";
+      position: absolute;
+      left: -12px;
+      top: 0;
+      background: #ff6b81;
+      color: white;
+      border-radius: 50%;
+      padding: 3px;
+      font-size: 0.8em;
+    }
+
+    .timeline .data {
+      font-weight: bold;
+      color: #ffe6ea;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .love-content {
+      padding: 10px 0;
+      color: #ffeaf4;
+      font-size: 1.05em;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .love-content h2 {
+      color: #ffadc3;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .love-content blockquote {
+      margin: 15px 0;
+      padding-left: 15px;
+      border-left: 3px solid #ff6b81;
+      font-style: italic;
+      color: #ffd2dd;
+    }
+
+    @media (max-width: 500px) {
+      .gallery img {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Página Inicial -->
+    <div class="section active" id="homeSection">
+      <h1>L & M 💖</h1>
+      <img class="main-photo" src="img/casal.jpg" alt="Foto do Casal" />
+      <p>Estamos juntos há:</p>
+      <div class="timer" id="timer">Carregando...</div>
+      <div class="message" id="message"></div>
+
+      <div class="gallery">
+        <img src="img/foto1.jpg" alt="Foto 1" />
+        <img src="img/foto2.jpg" alt="Foto 2" />
+        <img src="img/foto3.jpg" alt="Foto 3" />
+        <img src="img/foto4.jpg" alt="Foto 4" />
+      </div>
+
+      <div class="spotify-link">
+        <a href="https://open.spotify.com/playlist/1CuWgxoNAmeXp9cCD8A58I?si=eSZaBJLYSUeWUQXozRcRYw" target="_blank">
+         Ouça quando sentir minha falta.
+        </a>
+      </div>
+
+      <button class="history-btn" onclick="showPage('historiaSection')"> Nossa História</button>
+      <button class="love-btn" onclick="showPage('loveSection')"> Leia sempre que sentir dúvida do meu amor por você</button>
+    </div>
+
+    <!-- Página História -->
+    <div class="section" id="historiaSection">
+      <h2>Nossa História</h2>
+      <ul class="timeline">
+        <li><span class="data">01/03/2025</span><p>Nos conhecemos e tudo mudou. </p></li>
+        <li><span class="data">15/03/2025</span><p>Nosso primeiro encontro. </p></li>
+        <li><span class="data">20/03/2025</span><p>Nos tornamos inseparáveis. </p></li>
+        <li><span class="data">25/03/2025</span><p>Primeiro "eu te amo". </p></li>
+      </ul>
+      <button class="love-btn" onclick="showPage('homeSection')">Voltar</button>
+    </div>
+
+    <!-- Página Amor -->
+    <div class="section" id="loveSection">
+      <div class="love-content">
+        <h2>MEU AMOR</h2>
+        <p>Desde o instante em que te conheci, meu mundo ganhou novas cores. Você chegou como quem não quer nada e, de repente, se tornou tudo.</p>
+        <p>Cada sorriso seu é um universo que quero explorar, e cada abraço seu é o lar mais seguro que já encontrei.</p>
+        <p>Nosso amor é feito de detalhes – dos olhares trocados em silêncio, dos risos espontâneos, das mãos dadas no meio do caos. É forte, leve, intenso, e ao mesmo tempo, doce como poesia.</p>
+        <p>Contigo, o tempo desacelera. As horas ganham sentido. A vida fica mais bonita. Você é a melodia que meu coração esperava ouvir, a calma nas minhas tempestades, e a razão dos meus melhores dias.</p>
+        <blockquote>
+          Amor é você. É a gente.<br />
+          É o que construímos juntos, dia após dia.<br />
+          É olhar pra frente e ter a certeza de que quero você em todos os meus amanhãs.
+        </blockquote>
+        <p>Te amo com tudo o que sou, com tudo o que tenho e com tudo o que sonho ser.<br /><strong>Para sempre nós. </strong></p>
+      </div>
+      <button class="love-btn" onclick="showPage('homeSection')">Voltar</button>
+    </div>
+  </div>
+
+  <script>
+    const startDate = new Date("2024-12-05T22:00:00");
+
+    function updateTimer() {
+      const now = new Date();
+      const diff = now - startDate;
+      const seconds = Math.floor(diff / 1000) % 60;
+      const minutes = Math.floor(diff / 1000 / 60) % 60;
+      const hours = Math.floor(diff / 1000 / 60 / 60) % 24;
+      const days = Math.floor(diff / 1000 / 60 / 60 / 24);
+      document.getElementById("timer").textContent =
+        `${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos`;
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    const frases = [
+      "Você é o meu para sempre.",
+      "Cada dia com você é um presente.",
+      "Seu sorriso ilumina minha vida.",
+      "Te amar é a melhor parte do meu dia.",
+      "Com você, tudo é mais bonito.",
+      "Juntos somos poesia em movimento."
+    ];
+    const messageEl = document.getElementById("message");
+    let fraseIndex = 0;
+
+    function mostrarFrase() {
+      const frase = frases[fraseIndex];
+      messageEl.style.opacity = 0;
+      setTimeout(() => {
+        messageEl.textContent = "";
+        digitarFrase(frase);
+      }, 500);
+    }
+
+    function digitarFrase(frase) {
+      let i = 0;
+      const intervalo = setInterval(() => {
+        messageEl.textContent += frase.charAt(i);
+        i++;
+        if (i === frase.length) {
+          clearInterval(intervalo);
+          messageEl.style.opacity = 1;
+          setTimeout(() => {
+            fraseIndex = (fraseIndex + 1) % frases.length;
+            mostrarFrase();
+          }, 4000);
+        }
+      }, 50);
+    }
+
+    mostrarFrase();
+
+    function showPage(pageId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        if (section.id === pageId) {
+          section.classList.add('active');
+        } else {
+          section.classList.remove('active');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
